@@ -6,4 +6,4 @@ before_install:
     - docker build -t tegain/docker-casts-ci -f Dockerfile.dev .
 
 script:
-    - docker run tegain/docker-casts-ci npm run test -- --coverage
+    - docker run -e CI=true tegain/docker-casts-ci npm run test -- --coverage
