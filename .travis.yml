@@ -2,8 +2,23 @@ sudo: required
 services:
     - docker
 
+# Build docker image before running tests
 before_install:
     - docker build -t tegain/docker-casts-ci -f Dockerfile.dev .
 
+# Run tests
 script:
     - docker run -e CI=true tegain/docker-casts-ci npm run test -- --coverage
+
+# Config for AWS deployment
+deploy:
+    provider: elasticbeanstalk
+    region: 'eu-west-1'
+    app: 'docker-casts-ci'
+    env: 'DockerCastsCi-env'
+    bucket_name: 'elasticbeanstalk-eu-west-1-633110624599'
+    bucket_path: 'docker-casts-ci'
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
